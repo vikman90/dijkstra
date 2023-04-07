@@ -15,7 +15,7 @@ static vector<Node> createNodes(unsigned long size) {
 }
 
 vector<Node> dijkstra(const Graph & graph, unsigned long begin) {
-    auto nodes = createNodes(graph.size());
+    auto nodes = createNodes(graph.size);
     auto queue = NodeQueue();
 
     nodes[begin].cost = 0;
@@ -31,7 +31,7 @@ vector<Node> dijkstra(const Graph & graph, unsigned long begin) {
 
         cur_node->visited = true;
 
-        for (auto i = 0ul; i < graph.size(); i++) {
+        for (auto i = 0ul; i < graph.size; i++) {
             if (nodes[i].visited) {
                 continue;
             }

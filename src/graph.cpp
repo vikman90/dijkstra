@@ -10,18 +10,14 @@
 
 using namespace std;
 
-Graph::Graph(unsigned long size) : weights(size, vector<double>(size, 0)) { }
-
-unsigned long Graph::size() const {
-    return weights.size();
-}
+Graph::Graph(unsigned long size) : size(_size), _size(size), weights(size * size, 0) { }
 
 double Graph::getWeight(unsigned long i, unsigned long j) const {
-    return weights[i][j];
+    return weights[i * _size + j];
 }
 
 void Graph::setWeight(unsigned long i, unsigned long j, double value) {
-    weights[i][j] = weights[j][i] = value;
+    weights[i * _size + j] = weights[i + _size * j] = value;
 }
 
 Graph Graph::sample() {
@@ -64,20 +60,14 @@ Graph Graph::random(unsigned long size, unsigned connections) {
 }
 
 void Graph::resize(unsigned long size) {
-    weights.resize(size);
-
-    for (auto i = 0l; i < size; i++) {
-        weights[i].resize(size);
-        weights[i][i] = 0;
-    }
+    _size = size;
+    weights.resize(size * size);
 }
 
 ostream & operator << (ostream & os, const Graph & graph) {
-    const auto size = graph.weights.size();
-
-    for (auto i = 0ul; i < size; i++) {
-        for (auto j = i + 1; j < size; j++) {
-            os << graph.getWeight(i, j) << (j < size - 1 ? ' ' : '\n');
+    for (auto i = 0ul; i < graph._size; i++) {
+        for (auto j = i + 1; j < graph._size; j++) {
+            os << graph.getWeight(i, j) << (j < graph._size - 1 ? ' ' : '\n');
         }
     }
 
