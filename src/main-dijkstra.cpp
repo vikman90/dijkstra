@@ -1,4 +1,13 @@
-// March 18, 2023
+/**
+ * @file main-dijkstra.cpp
+ * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
+ * @brief Main function file for the dijstra program
+ * @version 0.1
+ * @date 2023-03-18
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include <chrono>
 #include <fstream>
@@ -7,6 +16,14 @@
 
 using namespace std;
 using namespace std::chrono;
+
+/**
+ * @brief Main function of the dijkstra application
+ *
+ * @param argc Number of arguments
+ * @param argv Argument vector
+ * @return Program exit code
+ */
 
 int main(int argc, char ** argv) {
     auto graph = Graph(0);

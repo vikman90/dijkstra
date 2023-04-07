@@ -1,4 +1,13 @@
-// April 7, 2023
+/**
+ * @file main-random.cpp
+ * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
+ * @brief Main function file for the random-graph program
+ * @version 0.1
+ * @date 2023-04-07
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include <chrono>
 #include <iostream>
@@ -6,6 +15,14 @@
 
 using namespace std;
 using namespace std::chrono;
+
+/**
+ * @brief Main function of the random-graph application
+ *
+ * @param argc Number of arguments
+ * @param argv Argument vector
+ * @return Program exit code
+ */
 
 int main(int argc, char ** argv) {
     auto size = argc > 1 ? strtoul(argv[1], nullptr, 10) : 100;

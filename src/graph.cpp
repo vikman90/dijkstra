@@ -1,4 +1,13 @@
-// March 18, 2023
+/**
+ * @file graph.cpp
+ * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
+ * @brief Implementation of class Graph
+ * @version 0.1
+ * @date 2023-03-18
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include <algorithm>
 #include <climits>
@@ -9,6 +18,8 @@
 #include "point.hpp"
 
 using namespace std;
+
+// Get a sample graph
 
 Graph Graph::sample() {
     auto graph = Graph(6);
@@ -25,6 +36,8 @@ Graph Graph::sample() {
 
     return graph;
 }
+
+// Create a random graph
 
 Graph Graph::random(unsigned long size, unsigned connections) {
     auto graph = Graph(size);
@@ -49,12 +62,21 @@ Graph Graph::random(unsigned long size, unsigned connections) {
     return graph;
 }
 
+// Resize a graph
+
 void Graph::resize(unsigned long size) {
     _size = size;
     weights.resize(size * size);
 }
 
-ostream & operator << (ostream & os, const Graph & graph) {
+/**
+ * @brief Insertion operator
+ *
+ * @param os Output stream
+ * @param graph A graph
+ * @return A reference to the output stream
+ */
+std::ostream & operator << (std::ostream & os, const Graph & graph) {
     for (auto i = 0ul; i < graph._size; i++) {
         for (auto j = i + 1; j < graph._size; j++) {
             os << graph.getWeight(i, j) << (j < graph._size - 1 ? ' ' : '\n');
@@ -64,7 +86,14 @@ ostream & operator << (ostream & os, const Graph & graph) {
     return os;
 }
 
-istream & operator >> (istream & is, Graph & graph) {
+/**
+ * @brief Extraction operator
+ *
+ * @param is Input stream
+ * @param graph A graph
+ * @return A reference to the input stream
+ */
+std::istream & operator >> (std::istream & is, Graph & graph) {
     auto buf = stringbuf();
     is.get(buf, '\n');
     auto str = buf.str();

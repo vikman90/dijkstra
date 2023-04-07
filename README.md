@@ -91,3 +91,21 @@ clang-uml
 sudo add-apt-repository ppa:bkryza/clang-uml
 sudo apt install clang-uml
 ```
+
+### Generate Doxygen documentation
+
+```shell
+cmake -B build
+cmake --build build --target docs
+```
+
+#### Requisites
+
+- Doxygen
+- Graphviz
+
+##### Setup on Ubuntu 22.04
+
+```shell
+sudo apt install doxygen graphviz
+```

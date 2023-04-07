@@ -1,9 +1,20 @@
-// April 6, 2023
+/**
+ * @file point.cpp
+ * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
+ * @brief Implementation of graph support classes
+ * @version 0.1
+ * @date 2023-04-06
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include <random>
 #include "point.hpp"
 
 using namespace std;
+
+// Generate a vector of random points
 
 vector<Point> randomPoints(unsigned long size) {
     static auto gen = mt19937(random_device()());
@@ -16,6 +27,8 @@ vector<Point> randomPoints(unsigned long size) {
 
     return points;
 }
+
+// Comparison operator
 
 bool EdgeCompare::operator()(const Edge & e1, const Edge & e2) {
     return e1.distance > e2.distance;

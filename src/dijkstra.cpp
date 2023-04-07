@@ -1,9 +1,24 @@
-// April 1, 2023
+/**
+ * @file dijkstra.cpp
+ * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
+ * @brief Dijkstra function implementation
+ * @version 0.1
+ * @date 2023-04-01
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include "dijkstra.hpp"
 
 using std::vector;
 
+/**
+ * @brief Create an array of nodes
+ *
+ * @param size Number of nodes
+ * @return An indexed array of nodes
+ */
 static vector<Node> createNodes(unsigned long size) {
     auto nodes = vector<Node>(size);
 
@@ -13,6 +28,8 @@ static vector<Node> createNodes(unsigned long size) {
 
     return nodes;
 }
+
+// Compute the Dijkstra's algorithm
 
 vector<Node> dijkstra(const Graph & graph, unsigned long begin) {
     auto nodes = createNodes(graph.size);
