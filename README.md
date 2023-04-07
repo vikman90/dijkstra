@@ -71,3 +71,23 @@ random-graph 5 | dijkstra
 > 0 → 3 [0.333003]
 > 0 → 4 [1.7423]
 > ```
+
+## Advanced
+
+### Generate UML diagrams
+
+```shell
+cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+clang-uml
+```
+
+#### Requisites
+
+- [clang-uml](https://github.com/bkryza/clang-uml)
+
+##### Setup on Ubuntu 22.04
+
+```shell
+sudo add-apt-repository ppa:bkryza/clang-uml
+sudo apt install clang-uml
+```

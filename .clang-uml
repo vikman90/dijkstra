@@ -1,0 +1,18 @@
+compilation_database_dir: build
+output_directory: doc/puml
+diagrams:
+  class:
+    type: class
+    glob:
+      - src/*.cpp
+    include:
+      paths:
+        - src
+  include:
+    type: include
+    glob:
+      - src/*.cpp
+    generate_system_headers: true
+    include:
+      paths:
+        - src
