@@ -7,10 +7,15 @@
 
 class Graph {
 public:
-    Graph(unsigned long size);
+    Graph(unsigned long size) : size(_size), _size(size), weights(size * size, 0) { }
 
-    double getWeight(unsigned long i, unsigned long j) const;
-    void setWeight(unsigned long i, unsigned long j, double value);
+    inline double getWeight(unsigned long i, unsigned long j) const {
+        return weights[i * _size + j];
+    }
+
+    inline void setWeight(unsigned long i, unsigned long j, double value) {
+        weights[i * _size + j] = weights[i + _size * j] = value;
+    }
 
     const unsigned long & size;
 

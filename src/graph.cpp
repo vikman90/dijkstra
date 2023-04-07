@@ -10,16 +10,6 @@
 
 using namespace std;
 
-Graph::Graph(unsigned long size) : size(_size), _size(size), weights(size * size, 0) { }
-
-double Graph::getWeight(unsigned long i, unsigned long j) const {
-    return weights[i * _size + j];
-}
-
-void Graph::setWeight(unsigned long i, unsigned long j, double value) {
-    weights[i * _size + j] = weights[i + _size * j] = value;
-}
-
 Graph Graph::sample() {
     auto graph = Graph(6);
 
