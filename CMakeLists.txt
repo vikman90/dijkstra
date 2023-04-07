@@ -7,14 +7,22 @@ project(Dijkstra
     LANGUAGES CXX
 )
 
+set(CMAKE_CXX_STANDARD 11)
+
 add_executable(dijkstra
     src/dijkstra.cpp
     src/graph.cpp
-    src/main.cpp
+    src/main-dijkstra.cpp
     src/node.cpp
     src/point.cpp
 )
 
-install(TARGETS dijkstra
+add_executable(random-graph
+    src/graph.cpp
+    src/main-random.cpp
+    src/point.cpp
+)
+
+install(TARGETS dijkstra random-graph
     DESTINATION bin
 )

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 class Graph {
@@ -15,6 +16,11 @@ public:
     static Graph sample();
     static Graph random(unsigned long size, unsigned connections);
 
+    friend std::ostream & operator << (std::ostream & os, const Graph & graph);
+    friend std::istream & operator >> (std::istream & is, Graph & graph);
+
 private:
     std::vector<std::vector<double>> weights;
+
+    void resize(unsigned long size);
 };

@@ -1,8 +1,10 @@
 // March 18, 2023
 
+#include <algorithm>
 #include <climits>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include "graph.hpp"
 #include "point.hpp"
 
@@ -59,4 +61,63 @@ Graph Graph::random(unsigned long size, unsigned connections) {
     }
 
     return graph;
+}
+
+void Graph::resize(unsigned long size) {
+    weights.resize(size);
+
+    for (auto i = 0l; i < size; i++) {
+        weights[i].resize(size);
+        weights[i][i] = 0;
+    }
+}
+
+ostream & operator << (ostream & os, const Graph & graph) {
+    const auto size = graph.weights.size();
+
+    for (auto i = 0ul; i < size; i++) {
+        for (auto j = i + 1; j < size; j++) {
+            os << graph.getWeight(i, j) << (j < size - 1 ? ' ' : '\n');
+        }
+    }
+
+    return os;
+}
+
+istream & operator >> (istream & is, Graph & graph) {
+    auto buf = stringbuf();
+    is.get(buf, '\n');
+    auto str = buf.str();
+    auto size = count(str.begin(), str.end(), ' ') + 2;
+
+    graph.resize(size);
+
+    // First line
+
+    {
+        auto ss = stringstream(str);
+
+        for (auto j = 1ul; j < size; j++) {
+            double weight;
+            ss >> weight;
+            graph.setWeight(0, j, weight);
+        }
+    }
+
+    // Rest of lines
+
+    for (auto i = 1ul; i < size; i++) {
+        for (auto j = i + 1; j < size; j++) {
+            double weight;
+            is >> weight;
+            graph.setWeight(i, j, weight);
+        }
+    }
+
+    if (is.fail()) {
+        cerr << "ERROR: cannot load data. Check file format.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    return is;
 }

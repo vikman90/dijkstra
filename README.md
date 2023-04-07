@@ -35,10 +35,10 @@ sudo xargs rm -v < build/install_manifest.txt
 
 ## Run
 
-### Usage
+### Random graph
 
 ```
-dijkstra [ SIZE [ CONNECTIONS ] ]
+random-graph [ SIZE [ CONNECTIONS ] ]
 ```
 
 |Option|Description|Range|Default|
@@ -46,15 +46,25 @@ dijkstra [ SIZE [ CONNECTIONS ] ]
 |`SIZE`|Number of nodes.|0 < `SIZE` < 4294967295|100|
 |`CONNECTIONS`|Number of connections per node.|0 < `CONNECTIONS` < 4294967295|3|
 
+### Dijkstra
+
+```
+dijkstra [ FILE ]
+```
+
+|Option|Description|Range|Default|
+|---|---|---|---|
+|`FILE`|Graph file.|File path|_stdin_|
+
 ### Example
 
 ```shell
-dijkstra 5
+random-graph 5 | dijkstra
 ```
 
 > ```
-> Generating random graph...    [0 ms.]
-> Running Dijkstra algorithm... [0 ms.]
+> Generating a random graph...    [0 ms.]
+> Running Dijkstra's algorithm... [0 ms.]
 >   → 0 [0]
 > 2 → 1 [2.14492]
 > 0 → 2 [0.671249]
