@@ -55,6 +55,14 @@ struct NodeCompare {
 typedef std::priority_queue<Node *, std::vector<Node *>, NodeCompare> NodeQueue;
 
 /**
+ * @brief Create an array of nodes
+ *
+ * @param size Number of nodes
+ * @return An indexed array of nodes
+ */
+std::vector<Node> createNodes(unsigned long size);
+
+/**
  * @brief Print a vector of nodes into the standard input
  *
  * @param nodes A vector of nodes

@@ -24,6 +24,18 @@ bool NodeCompare::operator()(const Node * n1, const Node * n2) {
     return n1->cost > n2->cost;
 }
 
+// Create an array of nodes
+
+std::vector<Node> createNodes(unsigned long size) {
+    auto nodes = vector<Node>(size);
+
+    for (auto i = 0ul; i < size; i++) {
+        nodes[i].index = i;
+    }
+
+    return nodes;
+}
+
 // Print a vector of nodes into the standard input
 
 bool printNodes(const std::vector<Node> & nodes) {

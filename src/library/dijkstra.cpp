@@ -13,22 +13,6 @@
 
 using std::vector;
 
-/**
- * @brief Create an array of nodes
- *
- * @param size Number of nodes
- * @return An indexed array of nodes
- */
-static vector<Node> createNodes(unsigned long size) {
-    auto nodes = vector<Node>(size);
-
-    for (auto i = 0ul; i < size; i++) {
-        nodes[i].index = i;
-    }
-
-    return nodes;
-}
-
 // Compute the Dijkstra's algorithm
 
 vector<Node> dijkstra(const Graph & graph, unsigned long begin) {
