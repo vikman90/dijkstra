@@ -1,4 +1,7 @@
 # Dijkstra
+
+[![CMake](https://github.com/vikman90/dijkstra/actions/workflows/cmake.yml/badge.svg)](https://github.com/vikman90/dijkstra/actions/workflows/cmake.yml)
+
 C++ implementation of [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 
 ## Setup
