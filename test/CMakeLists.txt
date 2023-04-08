@@ -12,30 +12,21 @@ set(INSTALL_GTEST off)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-
-add_executable(dijkstra_test dijkstra_test.cpp)
-target_include_directories(dijkstra_test PRIVATE ../src/library)
-target_link_libraries(dijkstra_test
-    GTest::gtest_main
-    dijkstra-lib
-)
-
-add_executable(graph_test graph_test.cpp)
-target_include_directories(graph_test PRIVATE ../src/library)
-target_link_libraries(graph_test
-    GTest::gtest_main
-    dijkstra-lib
-)
-
-add_executable(node_test node_test.cpp)
-target_include_directories(node_test PRIVATE ../src/library)
-target_link_libraries(node_test
-    GTest::gtest_main
-    dijkstra-lib
-)
-
 include(GoogleTest)
 
-gtest_discover_tests(dijkstra_test)
-gtest_discover_tests(graph_test)
-gtest_discover_tests(node_test)
+set(TESTS
+    dijkstra_test
+    graph_test
+    node_test
+    point_test
+)
+
+foreach(T IN LISTS TESTS)
+    add_executable(${T} ${T}.cpp)
+    target_include_directories(${T} PRIVATE ../src/library)
+    target_link_libraries(${T}
+        GTest::gtest_main
+        dijkstra-lib
+    )
+    gtest_discover_tests(${T})
+endforeach()
