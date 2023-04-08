@@ -27,7 +27,15 @@ target_link_libraries(graph_test
     dijkstra-lib
 )
 
+add_executable(node_test node_test.cpp)
+target_include_directories(node_test PRIVATE ../src/library)
+target_link_libraries(node_test
+    GTest::gtest_main
+    dijkstra-lib
+)
+
 include(GoogleTest)
 
 gtest_discover_tests(dijkstra_test)
 gtest_discover_tests(graph_test)
+gtest_discover_tests(node_test)
