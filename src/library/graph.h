@@ -105,4 +105,6 @@ private:
      * @param size The new size
      */
     void resize(unsigned long size);
+
+    friend class GraphTest;
 };

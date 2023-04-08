@@ -17,7 +17,7 @@ sudo apt install clang cmake
 ### Build
 
 ```shell
-cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -B build
+cmake -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=no
 cmake --build build -j$(nproc)
 ```
 
@@ -73,6 +73,14 @@ random-graph 5 | dijkstra
 > ```
 
 ## Advanced
+
+### Run tests
+
+```shell
+cmake -B build -DCMAKE_CXX_COMPILER=clang++
+cmake --build build -j$(nproc)
+ctest --test-dir build
+```
 
 ### Generate UML diagrams
 

@@ -8,9 +8,15 @@ project(Dijkstra
     LANGUAGES CXX
 )
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 add_subdirectory(src)
+
+include(CTest)
+
+if(BUILD_TESTING)
+    add_subdirectory(test)
+endif()
 
 find_package(Doxygen)
 
