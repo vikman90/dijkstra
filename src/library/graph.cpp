@@ -86,6 +86,28 @@ std::ostream & operator << (std::ostream & os, const Graph & graph) {
     return os;
 }
 
+// Equal comparison operator
+
+bool Graph::operator == (const Graph & other) const {
+    if (_size != other._size) {
+        return false;
+    }
+
+    for (auto i = 0ul; i < _size * _size; i++) {
+        if (weights[i] != other.weights[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Not equal comparison operator
+
+bool Graph::operator != (const Graph & other) const {
+    return !(operator == (other));
+}
+
 /**
  * @brief Extraction operator
  *

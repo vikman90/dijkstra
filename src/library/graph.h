@@ -49,6 +49,24 @@ public:
         weights[i * _size + j] = weights[i + _size * j] = value;
     }
 
+    /**
+     * @brief Equal comparison operator
+     *
+     * @param other Reference to a graph
+     * @retval true
+     * @retval false The graphs are different
+     */
+    bool operator == (const Graph & other) const;
+
+    /**
+     * @brief Not equal comparison operator
+     *
+     * @param other Reference to a graph
+     * @retval true The graphs are different
+     * @retval false The graphs are equal in size and weights
+     */
+    bool operator != (const Graph & other) const;
+
     /// @brief Number of nodes in the graph
     const unsigned long & size;
 

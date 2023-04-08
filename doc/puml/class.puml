@@ -22,6 +22,8 @@ class C_0001069613870066812431 {
 +Graph(unsigned long size) : void
 +getWeight(unsigned long i, unsigned long j) const : double
 +setWeight(unsigned long i, unsigned long j, double value) : void
++operator==(const Graph & other) const : bool
++operator!=(const Graph & other) const : bool
 {static} +sample() : Graph
 {static} +random(unsigned long size, unsigned int connections) : Graph
 -resize(unsigned long size) : void
