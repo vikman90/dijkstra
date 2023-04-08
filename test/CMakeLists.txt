@@ -13,10 +13,15 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+add_executable(dijkstra_test dijkstra_test.cpp)
+target_include_directories(dijkstra_test PRIVATE ../src/library)
+target_link_libraries(dijkstra_test
+    GTest::gtest_main
+    dijkstra-lib
+)
+
 add_executable(graph_test graph_test.cpp)
-
 target_include_directories(graph_test PRIVATE ../src/library)
-
 target_link_libraries(graph_test
     GTest::gtest_main
     dijkstra-lib
@@ -24,4 +29,5 @@ target_link_libraries(graph_test
 
 include(GoogleTest)
 
+gtest_discover_tests(dijkstra_test)
 gtest_discover_tests(graph_test)
