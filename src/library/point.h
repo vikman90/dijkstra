@@ -1,5 +1,5 @@
 /**
- * @file point.hpp
+ * @file point.h
  * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
  * @brief Declaration of graph support classes
  * @version 0.1

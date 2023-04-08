@@ -1,5 +1,5 @@
 /**
- * @file graph.hpp
+ * @file graph.h
  * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
  * @brief Declaration of class Graph
  * @version 0.1

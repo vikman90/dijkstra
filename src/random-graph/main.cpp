@@ -1,5 +1,5 @@
 /**
- * @file main-random.cpp
+ * @file main.cpp
  * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
  * @brief Main function file for the random-graph program
  * @version 0.1
@@ -11,7 +11,7 @@
 
 #include <chrono>
 #include <iostream>
-#include "graph.hpp"
+#include <graph.h>
 
 using namespace std;
 using namespace std::chrono;

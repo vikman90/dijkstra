@@ -9,7 +9,7 @@
  *
  */
 
-#include "dijkstra.hpp"
+#include "dijkstra.h"
 
 using std::vector;
 

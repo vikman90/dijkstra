@@ -1,5 +1,5 @@
 /**
- * @file main-dijkstra.cpp
+ * @file main.cpp
  * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
  * @brief Main function file for the dijstra program
  * @version 0.1
@@ -12,7 +12,7 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
-#include "dijkstra.hpp"
+#include <dijkstra.h>
 
 using namespace std;
 using namespace std::chrono;

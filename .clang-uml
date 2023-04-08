@@ -4,14 +4,14 @@ diagrams:
   class:
     type: class
     glob:
-      - src/*.cpp
+      - src/library/*.cpp
     include:
       paths:
         - src
   include:
     type: include
     glob:
-      - src/*.cpp
+      - src/library/*.cpp
     generate_system_headers: true
     include:
       paths:

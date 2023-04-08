@@ -14,8 +14,8 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
-#include "graph.hpp"
-#include "point.hpp"
+#include "graph.h"
+#include "point.h"
 
 using namespace std;
 

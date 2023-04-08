@@ -10,7 +10,7 @@
  */
 
 #include <random>
-#include "point.hpp"
+#include "point.h"
 
 using namespace std;
 

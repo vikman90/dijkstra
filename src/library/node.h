@@ -1,5 +1,5 @@
 /**
- * @file node.hpp
+ * @file node.h
  * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
  * @brief Implementation of class Node
  * @version 0.1

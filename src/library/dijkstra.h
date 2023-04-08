@@ -1,5 +1,5 @@
 /**
- * @file dijkstra.hpp
+ * @file dijkstra.h
  * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
  * @brief Dijkstra function declaration
  * @version 0.1
@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include "graph.hpp"
-#include "node.hpp"
+#include "graph.h"
+#include "node.h"
 
 /**
  * @brief Compute the Dijkstra's algorithm

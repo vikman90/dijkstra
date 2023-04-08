@@ -10,7 +10,7 @@
  */
 
 #include <iostream>
-#include "node.hpp"
+#include "node.h"
 
 using namespace std;
 
