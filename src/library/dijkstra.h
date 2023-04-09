@@ -21,4 +21,4 @@
  * @param begin Index of the starting node
  * @return A vector of nodes having the optimum paths
  */
-std::vector<Node> dijkstra(const Graph & graph, unsigned long begin);
+std::vector<Node> dijkstra(const Graph &graph, unsigned long begin);

@@ -9,13 +9,13 @@
  *
  */
 
+#include "graph.h"
+#include "point.h"
 #include <algorithm>
 #include <climits>
 #include <cmath>
 #include <iostream>
 #include <sstream>
-#include "graph.h"
-#include "point.h"
 
 using namespace std;
 
@@ -47,15 +47,15 @@ Graph Graph::random(unsigned long size, unsigned connections) {
         auto queue = EdgeQueue();
 
         for (auto j = i + 1; j < size; j++) {
-            auto d = sqrt(pow(points[i].x - points[j].x, 2) + pow(points[i].y - points[j].y, 2));
-            queue.push(Edge { .p1 = i, .p2 = j, .distance = d });
+            auto d = sqrt(pow(points[i].x - points[j].x, 2) +
+                          pow(points[i].y - points[j].y, 2));
+            queue.push(Edge{.p1 = i, .p2 = j, .distance = d});
         }
 
         for (auto n = 0; n < connections && !queue.empty(); n++) {
             auto edge = queue.top();
             graph.setWeight(edge.p1, edge.p2, edge.distance);
             queue.pop();
-
         }
     }
 
@@ -76,7 +76,7 @@ void Graph::resize(unsigned long size) {
  * @param graph A graph
  * @return A reference to the output stream
  */
-std::ostream & operator << (std::ostream & os, const Graph & graph) {
+std::ostream &operator<<(std::ostream &os, const Graph &graph) {
     for (auto i = 0ul; i < graph._size; i++) {
         for (auto j = i + 1; j < graph._size; j++) {
             os << graph.getWeight(i, j) << (j < graph._size - 1 ? ' ' : '\n');
@@ -88,7 +88,7 @@ std::ostream & operator << (std::ostream & os, const Graph & graph) {
 
 // Equal comparison operator
 
-bool Graph::operator == (const Graph & other) const {
+bool Graph::operator==(const Graph &other) const {
     if (_size != other._size) {
         return false;
     }
@@ -104,8 +104,8 @@ bool Graph::operator == (const Graph & other) const {
 
 // Not equal comparison operator
 
-bool Graph::operator != (const Graph & other) const {
-    return !(operator == (other));
+bool Graph::operator!=(const Graph &other) const {
+    return !(operator==(other));
 }
 
 /**
@@ -115,7 +115,7 @@ bool Graph::operator != (const Graph & other) const {
  * @param graph A graph
  * @return A reference to the input stream
  */
-std::istream & operator >> (std::istream & is, Graph & graph) {
+std::istream &operator>>(std::istream &is, Graph &graph) {
     auto buf = stringbuf();
     is.get(buf, '\n');
     auto str = buf.str();

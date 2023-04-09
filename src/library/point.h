@@ -16,15 +16,15 @@
 
 /// @brief Two-dimensional point description
 struct Point {
-    double x;   ///< X axis coordinate
-    double y;   ///< Y axis coordinate
+    double x; ///< X axis coordinate
+    double y; ///< Y axis coordinate
 };
 
 /// @brief Edge between two points
 struct Edge {
-    unsigned long p1;   ///< Index of a point
-    unsigned long p2;   ///< Index of another point
-    double distance;    ///< Distance between the points
+    unsigned long p1; ///< Index of a point
+    unsigned long p2; ///< Index of another point
+    double distance;  ///< Distance between the points
 };
 
 /**
@@ -45,7 +45,7 @@ struct EdgeCompare {
      * @retval true @p e1 has a higher distance than @p e2
      * @retval false Otherwise
      */
-    bool operator()(const Edge & e1, const Edge & e2);
+    bool operator()(const Edge &e1, const Edge &e2);
 };
 
 /// @brief Priority queue of edges

@@ -10,9 +10,9 @@
  */
 
 #include <chrono>
+#include <dijkstra.h>
 #include <fstream>
 #include <iostream>
-#include <dijkstra.h>
 
 using namespace std;
 using namespace std::chrono;
@@ -25,7 +25,7 @@ using namespace std::chrono;
  * @return Program exit code
  */
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv) {
     auto graph = Graph(0);
 
     if (argc > 1 && string(argv[1]) != "-") {

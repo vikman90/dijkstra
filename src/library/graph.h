@@ -17,13 +17,14 @@
 /// @brief Weighted graph
 
 class Graph {
-public:
+  public:
     /**
      * @brief Construct a new Graph object
      *
      * @param size Number of nodes
      */
-    Graph(unsigned long size) : size(_size), _size(size), weights(size * size, 0) { }
+    Graph(unsigned long size)
+        : size(_size), _size(size), weights(size * size, 0) {}
 
     /**
      * @brief Get the weight of an edge
@@ -56,7 +57,7 @@ public:
      * @retval true
      * @retval false The graphs are different
      */
-    bool operator == (const Graph & other) const;
+    bool operator==(const Graph &other) const;
 
     /**
      * @brief Not equal comparison operator
@@ -65,15 +66,16 @@ public:
      * @retval true The graphs are different
      * @retval false The graphs are equal in size and weights
      */
-    bool operator != (const Graph & other) const;
+    bool operator!=(const Graph &other) const;
 
     /// @brief Number of nodes in the graph
-    const unsigned long & size;
+    const unsigned long &size;
 
     /**
      * @brief Get a sample graph
      *
-     * @image html https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif
+     * @image html
+     * https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif
      *
      * @return A representation of the graph above
      */
@@ -88,11 +90,10 @@ public:
      */
     static Graph random(unsigned long size, unsigned connections);
 
-    friend std::ostream & operator << (std::ostream & os, const Graph & graph);
-    friend std::istream & operator >> (std::istream & is, Graph & graph);
+    friend std::ostream &operator<<(std::ostream &os, const Graph &graph);
+    friend std::istream &operator>>(std::istream &is, Graph &graph);
 
-private:
-
+  private:
     /// @brief Number of nodes in the graph
     unsigned long _size;
 

@@ -9,8 +9,8 @@
  *
  */
 
-#include <random>
 #include "point.h"
+#include <random>
 
 using namespace std;
 
@@ -22,7 +22,7 @@ vector<Point> randomPoints(unsigned long size) {
     auto distribution = uniform_real_distribution<>(-1.0, +1.0);
 
     for (auto i = 0ul; i < size; i++) {
-        points[i] = Point { .x = distribution(gen), .y = distribution(gen) };
+        points[i] = Point{.x = distribution(gen), .y = distribution(gen)};
     }
 
     return points;
@@ -30,6 +30,6 @@ vector<Point> randomPoints(unsigned long size) {
 
 // Comparison operator
 
-bool EdgeCompare::operator()(const Edge & e1, const Edge & e2) {
+bool EdgeCompare::operator()(const Edge &e1, const Edge &e2) {
     return e1.distance > e2.distance;
 }

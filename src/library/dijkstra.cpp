@@ -15,7 +15,7 @@ using std::vector;
 
 // Compute the Dijkstra's algorithm
 
-vector<Node> dijkstra(const Graph & graph, unsigned long begin) {
+vector<Node> dijkstra(const Graph &graph, unsigned long begin) {
     auto nodes = createNodes(graph.size);
     auto queue = NodeQueue();
 

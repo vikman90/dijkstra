@@ -10,8 +10,8 @@
  */
 
 #include <chrono>
-#include <iostream>
 #include <graph.h>
+#include <iostream>
 
 using namespace std;
 using namespace std::chrono;
@@ -24,7 +24,7 @@ using namespace std::chrono;
  * @return Program exit code
  */
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv) {
     auto size = argc > 1 ? strtoul(argv[1], nullptr, 10) : 100;
     auto connections = argc > 2 ? strtoul(argv[2], nullptr, 10) : 3;
 

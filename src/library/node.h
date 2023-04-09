@@ -23,11 +23,11 @@
  *
  */
 struct Node {
-    Node();                 ///< Constructor
-    unsigned long index;    ///< Index of this node in the array
-    unsigned long prev;     ///< Index of the previous (parent) node
-    bool visited;           ///< Visited flag
-    double cost;            ///< Accumulated cost in the path
+    Node();              ///< Constructor
+    unsigned long index; ///< Index of this node in the array
+    unsigned long prev;  ///< Index of the previous (parent) node
+    bool visited;        ///< Visited flag
+    double cost;         ///< Accumulated cost in the path
 };
 
 /**
@@ -48,7 +48,7 @@ struct NodeCompare {
      * @retval true @p n1 has a higher cost than @p n2
      * @retval false Otherwise
      */
-    bool operator()(const Node * n1, const Node * n2);
+    bool operator()(const Node *n1, const Node *n2);
 };
 
 /// @brief Priority queue of nodes
@@ -69,4 +69,4 @@ std::vector<Node> createNodes(unsigned long size);
  * @retval true The graph is connected
  * @retval false The graph is not connected
  */
-bool printNodes(const std::vector<Node> & nodes);
+bool printNodes(const std::vector<Node> &nodes);
