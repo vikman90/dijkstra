@@ -179,7 +179,7 @@ std::vector<DijkstraStep> StepTracer::trace(
                     u,
                     v,
                     edge.weight,
-                    "Relaxed edge (" + std::to_string(u) + " → " + std::to_string(v) + "): improved distance to " +
+                    "Relaxed edge (" + std::to_string(u) + " -> " + std::to_string(v) + "): improved distance to " +
                         format_weight(new_cost) + "."
                 );
             } else {
@@ -188,7 +188,7 @@ std::vector<DijkstraStep> StepTracer::trace(
                     u,
                     v,
                     edge.weight,
-                    "Checked edge (" + std::to_string(u) + " → " + std::to_string(v) + "): current distance (" +
+                    "Checked edge (" + std::to_string(u) + " -> " + std::to_string(v) + "): current distance (" +
                         format_weight(dist[v]) + ") <= proposed (" + format_weight(new_cost) + "). No update."
                 );
             }

@@ -289,6 +289,7 @@ void Canvas::render(
         // Double click on empty canvas to create node
         if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !hovered_node_.has_value()) {
             vg.add_node(mouse_world.x, mouse_world.y);
+            is_modified_ = true;
         }
 
         // Shift + Click or Drag to connect nodes
@@ -308,6 +309,7 @@ void Canvas::render(
                     Weight w = std::round(static_cast<double>(d) * 0.1) * 0.1;
                     if (w < 1.0) w = 1.0;
                     vg.add_edge(u, v, w);
+                    is_modified_ = true;
                 }
                 connecting_source_ = std::nullopt;
             }
@@ -321,6 +323,7 @@ void Canvas::render(
             if (dragging_node_.has_value()) {
                 if (ImGui::IsMouseDragging(ImGuiMouseButton_Left, 1.0f)) {
                     vg.set_node_position(*dragging_node_, mouse_world.x, mouse_world.y);
+                    is_modified_ = true;
                 }
                 if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
                     // Clicked without dragging: select Start / Target
@@ -339,6 +342,7 @@ void Canvas::render(
                             selected_start_ = clicked;
                             selected_target_ = std::nullopt;
                         }
+                        is_modified_ = true;
                     }
                     dragging_node_ = std::nullopt;
                 }
@@ -365,9 +369,11 @@ void Canvas::render(
             ImGui::Separator();
             if (ImGui::MenuItem("Set as Start (Source)")) {
                 selected_start_ = popup_node_;
+                is_modified_ = true;
             }
             if (ImGui::MenuItem("Set as Target (Destination)")) {
                 selected_target_ = popup_node_;
+                is_modified_ = true;
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Delete Vertex")) {
@@ -375,6 +381,7 @@ void Canvas::render(
                 if (selected_start_ == popup_node_) selected_start_ = std::nullopt;
                 if (selected_target_ == popup_node_) selected_target_ = std::nullopt;
                 popup_node_ = std::nullopt;
+                is_modified_ = true;
             }
         }
         ImGui::EndPopup();
@@ -388,11 +395,13 @@ void Canvas::render(
             if (ImGui::InputFloat("Weight", &edit_weight_buffer_, 1.0f, 5.0f, "%.1f")) {
                 if (edit_weight_buffer_ > 0.0f) {
                     vg.add_edge(popup_edge_->first, popup_edge_->second, edit_weight_buffer_);
+                    is_modified_ = true;
                 }
             }
             if (ImGui::MenuItem("Delete Edge")) {
                 vg.remove_edge(popup_edge_->first, popup_edge_->second);
                 popup_edge_ = std::nullopt;
+                is_modified_ = true;
             }
         }
         ImGui::EndPopup();

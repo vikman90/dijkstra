@@ -18,7 +18,7 @@ namespace {
 std::string format_time_us(double us) {
     std::ostringstream oss;
     if (us < 1000.0) {
-        oss << std::fixed << std::setprecision(1) << us << " μs";
+        oss << std::fixed << std::setprecision(1) << us << " us";
     } else {
         oss << std::fixed << std::setprecision(3) << (us / 1000.0) << " ms";
     }
@@ -249,9 +249,10 @@ void App::render_ui() {
     if (canvas_size.x < 50.0f) canvas_size.x = 50.0f;
     if (canvas_size.y < 50.0f) canvas_size.y = 50.0f;
 
-    // Trigger instant solve if graph or selection changed
-    if (mode_ == AppMode::INSTANT) {
+    // Solve only when graph or selection changed
+    if (mode_ == AppMode::INSTANT && (canvas_.consume_modified() || is_dirty_)) {
         solve_instant();
+        is_dirty_ = false;
     }
 
     canvas_.render(
@@ -281,12 +282,12 @@ void App::render_ui() {
 void App::render_top_toolbar() {
     if (ImGui::BeginMenuBar()) {
         // Algorithm Mode
-        if (ImGui::RadioButton("⚡ Instant", mode_ == AppMode::INSTANT)) {
+        if (ImGui::RadioButton("Instant (Fast)", mode_ == AppMode::INSTANT)) {
             mode_ = AppMode::INSTANT;
             solve_instant();
         }
         ImGui::SameLine();
-        if (ImGui::RadioButton("🎬 Step Animation", mode_ == AppMode::ANIMATED)) {
+        if (ImGui::RadioButton("Step Animation", mode_ == AppMode::ANIMATED)) {
             mode_ = AppMode::ANIMATED;
             start_animation();
         }
@@ -294,7 +295,7 @@ void App::render_top_toolbar() {
         ImGui::Separator();
 
         // Presets Menu
-        if (ImGui::BeginMenu("🌟 Presets")) {
+        if (ImGui::BeginMenu("Presets")) {
             if (ImGui::MenuItem("Wikipedia (6 Nodes)")) load_preset("wikipedia");
             if (ImGui::MenuItem("Ring Topology")) load_preset("ring");
             if (ImGui::MenuItem("Star Topology")) load_preset("star");
@@ -304,7 +305,7 @@ void App::render_top_toolbar() {
         }
 
         // File Menu
-        if (ImGui::BeginMenu("📁 Map")) {
+        if (ImGui::BeginMenu("Map")) {
             if (ImGui::MenuItem("Save to JSON...")) {
                 std::string err;
                 if (!Presets::save_to_json(vg_, file_path_buffer_, err)) {
@@ -328,11 +329,11 @@ void App::render_top_toolbar() {
         }
 
         // Quick Actions
-        if (ImGui::Button("🎲 Random")) {
+        if (ImGui::Button("Random Graph")) {
             show_random_modal_ = true;
         }
 
-        if (ImGui::Button("🎯 Center View")) {
+        if (ImGui::Button("Center View")) {
             canvas_.center_on_graph(vg_, ImGui::GetIO().DisplaySize);
         }
 
@@ -369,13 +370,13 @@ void App::render_playback_bar() {
 
     if (ImGui::Begin("PlaybackBar", nullptr, flags)) {
         // Controls Row
-        if (ImGui::Button("⏮")) reset_playback();
+        if (ImGui::Button("Reset")) reset_playback();
         ImGui::SameLine();
-        if (ImGui::Button("⏪")) step_backward();
+        if (ImGui::Button("Prev")) step_backward();
         ImGui::SameLine();
-        if (ImGui::Button(is_playing_ ? "⏸ Pause" : "▶ Play")) toggle_play();
+        if (ImGui::Button(is_playing_ ? "Pause" : "Play")) toggle_play();
         ImGui::SameLine();
-        if (ImGui::Button("⏩")) step_forward();
+        if (ImGui::Button("Next")) step_forward();
 
         ImGui::SameLine();
         ImGui::SetNextItemWidth(140.0f);
@@ -393,7 +394,7 @@ void App::render_playback_bar() {
         // Action Description
         if (current_step_idx_ >= 0 && current_step_idx_ < total) {
             ImGui::Separator();
-            ImGui::TextColored(ImVec4(0.95f, 0.75f, 0.25f, 1.0f), "💬 %s", animation_steps_[static_cast<std::size_t>(current_step_idx_)].description.c_str());
+            ImGui::TextColored(ImVec4(0.95f, 0.75f, 0.25f, 1.0f), "%s", animation_steps_[static_cast<std::size_t>(current_step_idx_)].description.c_str());
         }
     }
     ImGui::End();
@@ -418,7 +419,7 @@ void App::render_hud_overlay() {
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.10f, 0.12f, 0.15f, 0.88f));
 
     if (ImGui::Begin("HudStats", nullptr, flags)) {
-        ImGui::TextColored(ImVec4(0.35f, 0.75f, 1.0f, 1.0f), "📊 Execution Metrics");
+        ImGui::TextColored(ImVec4(0.35f, 0.75f, 1.0f, 1.0f), "Execution Metrics");
         ImGui::Separator();
 
         ImGui::Text("Vertices / Edges: %zu / %zu", hud_stats_.total_nodes, hud_stats_.total_edges);
@@ -444,7 +445,7 @@ void App::render_hud_overlay() {
             if (!hud_stats_.path_nodes.empty()) {
                 std::ostringstream path_oss;
                 for (std::size_t i = 0; i < hud_stats_.path_nodes.size(); ++i) {
-                    path_oss << hud_stats_.path_nodes[i] << (i + 1 < hud_stats_.path_nodes.size() ? " → " : "");
+                    path_oss << hud_stats_.path_nodes[i] << (i + 1 < hud_stats_.path_nodes.size() ? " -> " : "");
                 }
                 ImGui::TextWrapped("Route: %s", path_oss.str().c_str());
             }
@@ -465,7 +466,7 @@ void App::render_help_modal() {
     ImGui::SetNextWindowSize(ImVec2(520.0f, 400.0f));
 
     if (ImGui::BeginPopupModal("HelpGuideModal", &show_help_modal_, ImGuiWindowFlags_NoResize)) {
-        ImGui::TextColored(ImVec4(0.4f, 0.8f, 1.0f, 1.0f), "📖 Interactive Dijkstra GUI Guide");
+        ImGui::TextColored(ImVec4(0.4f, 0.8f, 1.0f, 1.0f), "Interactive Dijkstra GUI Guide");
         ImGui::Separator();
 
         ImGui::TextColored(ImVec4(0.95f, 0.85f, 0.3f, 1.0f), "Canvas Controls:");
@@ -478,11 +479,11 @@ void App::render_help_modal() {
 
         ImGui::Separator();
         ImGui::TextColored(ImVec4(0.95f, 0.85f, 0.3f, 1.0f), "Color Legend:");
-        ImGui::BulletText("🟢 Green: Start vertex.");
-        ImGui::BulletText("🔴 Red: Target vertex.");
-        ImGui::BulletText("🟠 Orange: Candidate vertex in Priority Queue (Open Set).");
-        ImGui::BulletText("🔵 Blue: Settled vertex with optimal distance (Closed Set).");
-        ImGui::BulletText("⭐ Gold: Optimal shortest path route.");
+        ImGui::BulletText("[Green] Start vertex.");
+        ImGui::BulletText("[Red] Target vertex.");
+        ImGui::BulletText("[Orange] Candidate vertex in Priority Queue (Open Set).");
+        ImGui::BulletText("[Blue] Settled vertex with optimal distance (Closed Set).");
+        ImGui::BulletText("[Gold] Optimal shortest path route.");
 
         ImGui::Separator();
         if (ImGui::Button("Got it!", ImVec2(120.0f, 0.0f))) {

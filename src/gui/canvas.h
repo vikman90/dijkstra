@@ -98,13 +98,25 @@ class Canvas {
     }
     void set_selected_start(std::optional<NodeId> id) noexcept {
         selected_start_ = id;
+        is_modified_ = true;
     }
     void set_selected_target(std::optional<NodeId> id) noexcept {
         selected_target_ = id;
+        is_modified_ = true;
     }
     void clear_selection() noexcept {
         selected_start_ = std::nullopt;
         selected_target_ = std::nullopt;
+        is_modified_ = true;
+    }
+
+    [[nodiscard]] bool consume_modified() noexcept {
+        bool m = is_modified_;
+        is_modified_ = false;
+        return m;
+    }
+    void mark_modified() noexcept {
+        is_modified_ = true;
     }
 
     // Viewport reset
@@ -134,6 +146,8 @@ class Canvas {
     std::optional<NodeId> popup_node_{std::nullopt};
     std::optional<std::pair<NodeId, NodeId>> popup_edge_{std::nullopt};
     float edit_weight_buffer_{1.0f};
+
+    bool is_modified_{true};
 };
 
 } // namespace dijkstra::gui

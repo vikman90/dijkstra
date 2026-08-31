@@ -93,6 +93,10 @@ class App {
     }
     [[nodiscard]] const std::optional<DijkstraStep> &current_step() const;
 
+    void mark_dirty() noexcept {
+        is_dirty_ = true;
+    }
+
   private:
     void render_top_toolbar();
     void render_playback_bar();
@@ -104,6 +108,7 @@ class App {
     Canvas canvas_;
 
     AppMode mode_{AppMode::INSTANT};
+    bool is_dirty_{true};
     std::optional<DijkstraResult> instant_result_{std::nullopt};
 
     std::vector<DijkstraStep> animation_steps_;
