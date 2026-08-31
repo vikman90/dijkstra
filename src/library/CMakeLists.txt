@@ -18,6 +18,10 @@ target_include_directories(dijkstra-lib
 
 target_compile_features(dijkstra-lib PUBLIC cxx_std_20)
 
+target_link_libraries(dijkstra-lib PUBLIC
+    dijkstra-compiler-flags
+)
+
 install(TARGETS dijkstra-lib
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

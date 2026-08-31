@@ -8,18 +8,19 @@ endif()
 project(Dijkstra
     VERSION 0.2.0
     DESCRIPTION "A modern C++ implementation of Dijkstra's algorithm and graph utilities"
-    LANGUAGES CXX
+    LANGUAGES CXX C
 )
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Compiler warnings
+# Interface target for strict compiler warnings on our own code
+add_library(dijkstra-compiler-flags INTERFACE)
 if(MSVC)
-    add_compile_options(/W4 /permissive-)
+    target_compile_options(dijkstra-compiler-flags INTERFACE /W4 /permissive-)
 else()
-    add_compile_options(
+    target_compile_options(dijkstra-compiler-flags INTERFACE
         -Wall
         -Wextra
         -Wpedantic
@@ -35,11 +36,15 @@ endif()
 
 # Sanitizers option
 option(ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
-if(ENABLE_SANITIZERS)
-    if(NOT MSVC)
-        add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-        add_link_options(-fsanitize=address,undefined)
-    endif()
+if(ENABLE_SANITIZERS AND NOT MSVC)
+    target_compile_options(dijkstra-compiler-flags INTERFACE -fsanitize=address,undefined -fno-omit-frame-pointer)
+    target_link_options(dijkstra-compiler-flags INTERFACE -fsanitize=address,undefined)
+endif()
+
+# Option to build GUI
+option(BUILD_GUI "Build the graphical interactive UI (Dear ImGui + GLFW)" ON)
+if(BUILD_GUI)
+    find_package(OpenGL REQUIRED)
 endif()
 
 add_subdirectory(src)

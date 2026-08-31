@@ -21,6 +21,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install OpenGL & X11 Dependencies
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -y --no-install-recommends
+          libgl1-mesa-dev
+          libxrandr-dev
+          libxinerama-dev
+          libxcursor-dev
+          libxi-dev
+          libxkbcommon-dev
+          xvfb
+
       - name: Configure CMake
         env:
           CC: ${{ matrix.compiler.c }}
@@ -29,18 +41,30 @@ jobs:
           cmake -B build
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
           -DBUILD_TESTING=ON
+          -DBUILD_GUI=ON
 
       - name: Build
         run: cmake --build build -j$(nproc)
 
-      - name: Run Test Suite (Unit + Integration)
-        run: ctest --test-dir build --output-on-failure --verbose
+      - name: Run Test Suite (Unit + Integration + GUI)
+        run: xvfb-run ctest --test-dir build --output-on-failure --verbose
 
   sanitizers:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install OpenGL & X11 Dependencies
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -y --no-install-recommends
+          libgl1-mesa-dev
+          libxrandr-dev
+          libxinerama-dev
+          libxcursor-dev
+          libxi-dev
+          xvfb
 
       - name: Configure with ASan & UBSan
         env:
@@ -50,10 +74,11 @@ jobs:
           cmake -B build-asan
           -DCMAKE_BUILD_TYPE=Debug
           -DBUILD_TESTING=ON
+          -DBUILD_GUI=ON
           -DENABLE_SANITIZERS=ON
 
       - name: Build with Sanitizers
         run: cmake --build build-asan -j$(nproc)
 
       - name: Test under Sanitizers
-        run: ctest --test-dir build-asan --output-on-failure
+        run: xvfb-run ctest --test-dir build-asan --output-on-failure

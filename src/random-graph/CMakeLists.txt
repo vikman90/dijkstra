@@ -5,6 +5,7 @@ add_executable(random-graph
 target_link_libraries(random-graph
     PRIVATE
         dijkstra-lib
+        dijkstra-compiler-flags
 )
 
 install(TARGETS random-graph
