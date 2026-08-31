@@ -30,7 +30,7 @@ add_library(imgui-lib STATIC
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
-target_include_directories(imgui-lib PUBLIC
+target_include_directories(imgui-lib SYSTEM PUBLIC
     ${imgui_SOURCE_DIR}
     ${imgui_SOURCE_DIR}/backends
 )
@@ -44,3 +44,30 @@ target_link_libraries(imgui-lib PUBLIC
 if(NOT MSVC)
     target_compile_options(imgui-lib PRIVATE -w)
 endif()
+
+# GUI Application Executable
+add_executable(dijkstra-gui
+    main.cpp
+    app.cpp
+    canvas.cpp
+    presets.cpp
+    step_tracer.cpp
+)
+
+target_link_libraries(dijkstra-gui PRIVATE
+    dijkstra-lib
+    imgui-lib
+    dijkstra-compiler-flags
+)
+
+if(NOT MSVC)
+    target_compile_options(dijkstra-gui PRIVATE -Wno-old-style-cast)
+endif()
+
+target_include_directories(dijkstra-gui PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+install(TARGETS dijkstra-gui
+    RUNTIME DESTINATION bin
+)
