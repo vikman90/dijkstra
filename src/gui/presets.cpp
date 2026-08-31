@@ -24,13 +24,13 @@ float euclidean(const Point &p1, const Point &p2) {
 
 VisualGraph Presets::wikipedia_sample() {
     VisualGraph vg;
-    // 6 nodes placed in standard layout
-    vg.add_node(150.0f, 250.0f); // Node 0 (Leftmost)
-    vg.add_node(300.0f, 130.0f); // Node 1 (Top-Left)
-    vg.add_node(300.0f, 370.0f); // Node 2 (Bottom-Left)
-    vg.add_node(500.0f, 130.0f); // Node 3 (Top-Right)
-    vg.add_node(650.0f, 250.0f); // Node 4 (Rightmost)
-    vg.add_node(500.0f, 370.0f); // Node 5 (Bottom-Right)
+    // 6 nodes placed in standard balanced layout
+    vg.add_node(360.0f, 400.0f); // Node 0 (Leftmost)
+    vg.add_node(540.0f, 250.0f); // Node 1 (Top-Left)
+    vg.add_node(540.0f, 550.0f); // Node 2 (Bottom-Left)
+    vg.add_node(780.0f, 250.0f); // Node 3 (Top-Right)
+    vg.add_node(960.0f, 400.0f); // Node 4 (Rightmost)
+    vg.add_node(780.0f, 550.0f); // Node 5 (Bottom-Right)
 
     vg.add_edge(0, 1, 7.0);
     vg.add_edge(0, 2, 9.0);

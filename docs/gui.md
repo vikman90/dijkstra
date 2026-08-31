@@ -12,7 +12,11 @@ graph LR
 
 ---
 
-## 1. Launching the GUI
+## 1. Application Overview & Launching
+
+<p align="center">
+  <img src="assets/gui_screenshot.png" alt="Dijkstra Interactive GUI Visualizer" width="95%">
+</p>
 
 Build and launch the application:
 

@@ -76,6 +76,11 @@ ctest --test-dir build --output-on-failure
 ```
 
 ## 🖥️ Interactive GUI Application (`dijkstra-gui`)
+
+<p align="center">
+  <img src="docs/assets/gui_screenshot.png" alt="Dijkstra Interactive GUI Visualizer" width="90%">
+</p>
+
 Launch the interactive desktop visualizer:
 
 ```bash

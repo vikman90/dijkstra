@@ -11,7 +11,12 @@
 
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 #include <iostream>
+#include <string>
+#include <vector>
 
 #if defined(__APPLE__)
 #define GL_SILENCE_DEPRECATION
@@ -58,7 +63,17 @@ void setup_imgui_dark_style() {
 
 } // namespace
 
-int main(int, char **) {
+int main(int argc, char **argv) {
+    std::string screenshot_path;
+    bool screenshot_mode = false;
+
+    for (int i = 1; i < argc; ++i) {
+        if (std::string(argv[i]) == "--screenshot" && i + 1 < argc) {
+            screenshot_mode = true;
+            screenshot_path = argv[++i];
+        }
+    }
+
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW\n";
         return 1;
@@ -72,6 +87,10 @@ int main(int, char **) {
 #if defined(__APPLE__)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+
+    if (screenshot_mode) {
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    }
 
     GLFWwindow *window = glfwCreateWindow(1280, 800, "Dijkstra Algorithm Interactive Visualizer", nullptr, nullptr);
     if (!window) {
@@ -94,6 +113,49 @@ int main(int, char **) {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     dijkstra::gui::App app;
+
+    if (screenshot_mode) {
+        // Render 5 frames to let ImGui layout stabilize
+        for (int frame = 0; frame < 5; ++frame) {
+            glfwPollEvents();
+            app.update(0.016f);
+
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            app.render_ui();
+
+            ImGui::Render();
+            int display_w, display_h;
+            glfwGetFramebufferSize(window, &display_w, &display_h);
+            glViewport(0, 0, display_w, display_h);
+            glClearColor(0.10f, 0.11f, 0.14f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            glfwSwapBuffers(window);
+        }
+
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        std::vector<unsigned char> pixels(static_cast<std::size_t>(width * height * 3));
+        glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+
+        stbi_flip_vertically_on_write(1);
+        if (stbi_write_png(screenshot_path.c_str(), width, height, 3, pixels.data(), width * 3)) {
+            std::cout << "Screenshot successfully saved to " << screenshot_path << "\n";
+        } else {
+            std::cerr << "Failed to write screenshot to " << screenshot_path << "\n";
+        }
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return 0;
+    }
 
     double last_time = glfwGetTime();
 

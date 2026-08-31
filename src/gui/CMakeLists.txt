@@ -17,7 +17,13 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP ON
 )
 
-FetchContent_MakeAvailable(glfw imgui)
+FetchContent_Declare(
+    stb
+    URL https://github.com/nothings/stb/archive/refs/heads/master.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP ON
+)
+
+FetchContent_MakeAvailable(glfw imgui stb)
 
 # ImGui library target
 add_library(imgui-lib STATIC
@@ -63,6 +69,10 @@ target_link_libraries(dijkstra-gui PRIVATE
 if(NOT MSVC)
     target_compile_options(dijkstra-gui PRIVATE -Wno-old-style-cast)
 endif()
+
+target_include_directories(dijkstra-gui SYSTEM PRIVATE
+    ${stb_SOURCE_DIR}
+)
 
 target_include_directories(dijkstra-gui PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
