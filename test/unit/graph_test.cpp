@@ -137,10 +137,33 @@ TEST(GraphTest, SampleGraphStructure) {
     EXPECT_DOUBLE_EQ(g.get_weight(4, 5), 9.0);
 }
 
-TEST(GraphTest, RandomGeometricDeterministic) {
+TEST(GraphTest, IsConnected) {
+    Graph g_empty(0);
+    EXPECT_TRUE(g_empty.is_connected());
+
+    Graph g_single(1);
+    EXPECT_TRUE(g_single.is_connected());
+
+    Graph g_sample = Graph::sample();
+    EXPECT_TRUE(g_sample.is_connected());
+
+    Graph g_disconnected(4);
+    g_disconnected.add_edge(0, 1, 1.0);
+    g_disconnected.add_edge(2, 3, 1.0);
+    EXPECT_FALSE(g_disconnected.is_connected());
+}
+
+TEST(GraphTest, RandomGeometricDeterministicAndConnected) {
     Graph g1 = Graph::random_geometric(10, 3, 100);
     Graph g2 = Graph::random_geometric(10, 3, 100);
     EXPECT_EQ(g1, g2);
+    EXPECT_TRUE(g1.is_connected());
+
+    // Test with multiple sizes and random seeds
+    for (std::size_t n = 2; n <= 30; n += 5) {
+        Graph g = Graph::random_geometric(n, 1, n * 7);
+        EXPECT_TRUE(g.is_connected());
+    }
 }
 
 TEST(GraphTest, RandomErdosRenyiDeterministic) {

@@ -135,6 +135,10 @@ VisualGraph Presets::random_geometric(
 ) {
     VisualGraph vg;
     if (nodes == 0) return vg;
+    if (nodes == 1) {
+        vg.add_node(width * 0.5f, height * 0.5f);
+        return vg;
+    }
 
     std::mt19937_64 engine;
     if (seed.has_value()) {
@@ -153,6 +157,43 @@ VisualGraph Presets::random_geometric(
         vg.add_node(dist_x(engine), dist_y(engine));
     }
 
+    // 1. Guarantee connectivity using Euclidean Minimum Spanning Tree (MST)
+    std::vector<bool> in_mst(nodes, false);
+    std::vector<float> min_dist(nodes, 1e9f);
+    std::vector<NodeId> parent(nodes, kNullNode);
+
+    min_dist[0] = 0.0f;
+
+    for (std::size_t step = 0; step < nodes; ++step) {
+        NodeId u = kNullNode;
+        float best_dist = 1e9f;
+        for (NodeId i = 0; i < nodes; ++i) {
+            if (!in_mst[i] && min_dist[i] < best_dist) {
+                best_dist = min_dist[i];
+                u = i;
+            }
+        }
+        if (u == kNullNode) break;
+
+        in_mst[u] = true;
+        if (parent[u] != kNullNode) {
+            Weight w = std::round(static_cast<double>(best_dist) * 0.1) * 0.1;
+            if (w < 1.0) w = 1.0;
+            vg.add_edge(parent[u], u, w);
+        }
+
+        for (NodeId v = 0; v < nodes; ++v) {
+            if (!in_mst[v]) {
+                float d = euclidean(vg.positions()[u], vg.positions()[v]);
+                if (d < min_dist[v]) {
+                    min_dist[v] = d;
+                    parent[v] = u;
+                }
+            }
+        }
+    }
+
+    // 2. Add remaining nearest neighbors up to 'connections' per node
     struct DistEdge {
         NodeId p1;
         NodeId p2;
@@ -167,12 +208,16 @@ VisualGraph Presets::random_geometric(
             float d = euclidean(vg.positions()[i], vg.positions()[j]);
             pq.push(DistEdge{.p1 = i, .p2 = j, .d = d});
         }
-        for (std::size_t k = 0; k < connections && !pq.empty(); ++k) {
+        std::size_t added = vg.graph().neighbors(i).size();
+        while (added < connections && !pq.empty()) {
             auto top = pq.top();
             pq.pop();
-            Weight w = std::round(static_cast<double>(top.d) * 0.1) * 0.1;
-            if (w < 1.0) w = 1.0;
-            vg.add_edge(top.p1, top.p2, w);
+            if (!vg.graph().has_edge(top.p1, top.p2)) {
+                Weight w = std::round(static_cast<double>(top.d) * 0.1) * 0.1;
+                if (w < 1.0) w = 1.0;
+                vg.add_edge(top.p1, top.p2, w);
+                ++added;
+            }
         }
     }
 

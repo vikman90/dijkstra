@@ -211,18 +211,79 @@ Graph Graph::sample() {
     return graph;
 }
 
+bool Graph::is_connected() const {
+    if (nodes_ <= 1) {
+        return true;
+    }
+    std::vector<bool> visited(nodes_, false);
+    std::queue<NodeId> q;
+    visited[0] = true;
+    q.push(0);
+    std::size_t visited_count = 1;
+
+    while (!q.empty()) {
+        NodeId u = q.front();
+        q.pop();
+        for (const auto &edge : adj_[u]) {
+            if (!visited[edge.to]) {
+                visited[edge.to] = true;
+                ++visited_count;
+                q.push(edge.to);
+            }
+        }
+    }
+    return visited_count == nodes_;
+}
+
 Graph Graph::random_geometric(
     std::size_t nodes,
     std::size_t connections,
     std::optional<std::uint64_t> seed
 ) {
     Graph graph(nodes, false);
-    if (nodes == 0) {
+    if (nodes <= 1) {
         return graph;
     }
 
     auto points = random_points(nodes, seed);
 
+    // 1. Guarantee connectivity using Euclidean Minimum Spanning Tree (MST via Prim's algorithm)
+    std::vector<bool> in_mst(nodes, false);
+    std::vector<double> min_dist(nodes, kInfinity);
+    std::vector<NodeId> parent(nodes, kNullNode);
+
+    min_dist[0] = 0.0;
+
+    for (std::size_t step = 0; step < nodes; ++step) {
+        NodeId u = kNullNode;
+        double best_dist = kInfinity;
+        for (NodeId i = 0; i < nodes; ++i) {
+            if (!in_mst[i] && min_dist[i] < best_dist) {
+                best_dist = min_dist[i];
+                u = i;
+            }
+        }
+        if (u == kNullNode) {
+            break;
+        }
+
+        in_mst[u] = true;
+        if (parent[u] != kNullNode) {
+            graph.add_edge(parent[u], u, best_dist);
+        }
+
+        for (NodeId v = 0; v < nodes; ++v) {
+            if (!in_mst[v]) {
+                double d = euclidean_distance(points[u], points[v]);
+                if (d < min_dist[v]) {
+                    min_dist[v] = d;
+                    parent[v] = u;
+                }
+            }
+        }
+    }
+
+    // 2. Add remaining nearest neighbors up to 'connections' per node
     struct DistanceEdge {
         NodeId p1;
         NodeId p2;
@@ -239,15 +300,20 @@ Graph Graph::random_geometric(
             std::greater<DistanceEdge>>
             pq;
 
-        for (NodeId j = i + 1; j < nodes; ++j) {
+        for (NodeId j = 0; j < nodes; ++j) {
+            if (i == j) continue;
             double d = euclidean_distance(points[i], points[j]);
             pq.push(DistanceEdge{.p1 = i, .p2 = j, .dist = d});
         }
 
-        for (std::size_t n = 0; n < connections && !pq.empty(); ++n) {
+        std::size_t added = graph.neighbors(i).size();
+        while (added < connections && !pq.empty()) {
             const auto top = pq.top();
-            graph.add_edge(top.p1, top.p2, top.dist);
             pq.pop();
+            if (!graph.has_edge(top.p1, top.p2)) {
+                graph.add_edge(top.p1, top.p2, top.dist);
+                ++added;
+            }
         }
     }
 

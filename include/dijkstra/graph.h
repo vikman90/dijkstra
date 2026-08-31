@@ -108,6 +108,11 @@ class Graph {
     void clear() noexcept;
 
     /**
+     * @brief Check whether the entire graph forms a single connected component.
+     */
+    [[nodiscard]] bool is_connected() const;
+
+    /**
      * @brief Export graph topology to Graphviz DOT format.
      *
      * @param graph_name Name of the graph in DOT header.
