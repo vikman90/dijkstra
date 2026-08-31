@@ -56,5 +56,6 @@ nav:
   - "Algorithm & Theory": algorithm.md
   - "Data Structures": data-structures.md
   - "Modern C++ (C++20)": cpp-features.md
+  - "Interactive GUI": gui.md
   - "CLI Reference": cli.md
   - "Testing & Quality": testing.md

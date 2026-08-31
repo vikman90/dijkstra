@@ -14,6 +14,7 @@ An educational and high-performance **C++20 implementation of [Dijkstra's shorte
 👉 **[Explore Full Guide & Visual Walkthroughs](https://vikman90.github.io/dijkstra)**
 
 The documentation includes:
+- **[Interactive GUI](https://vikman90.github.io/dijkstra/gui/)**: Complete guide to the 2D canvas editor, step-by-step playback, and HUD metrics.
 - **[Algorithm & Theory](https://vikman90.github.io/dijkstra/algorithm/)**: Step-by-step visual trace with Mermaid diagrams, relaxation mechanics, and proofs.
 - **[Data Structures](https://vikman90.github.io/dijkstra/data-structures/)**: In-depth comparison of Adjacency Lists vs Matrices and priority queue caching behavior.
 - **[Modern C++ Guide](https://vikman90.github.io/dijkstra/cpp-features/)**: Practical guide to `std::optional`, `<ranges>`, spaceship operator `<=>`, structured bindings, and exception design.
@@ -32,12 +33,14 @@ graph LR
     end
 
     subgraph "Frontends / Tools"
+        Dijkstra --> GUI["dijkstra-gui<br/>(Dear ImGui + GLFW 2D Editor)"]
         Dijkstra --> CLI1["dijkstra CLI<br/>(Path queries, JSON, DOT)"]
         Graph --> CLI2["random-graph CLI<br/>(Geometric & Erdős-Rényi)"]
     end
 ```
 
-- **Clean Decoupling**: Standalone static library (`dijkstra-lib`) under `namespace dijkstra` with zero CLI dependencies.
+- **Interactive 2D GUI**: Built with Dear ImGui and GLFW for real-time node editing, animated playback, timeline scrubbing, and live execution statistics.
+- **Clean Decoupling**: Standalone static library (`dijkstra-lib`) under `namespace dijkstra` with zero CLI or UI dependencies.
 - **Memory & Time Efficiency**: Sparse adjacency list representation ($\mathcal{O}(V + E)$ space) and cache-friendly priority queue ($\mathcal{O}((V + E) \log V)$ time).
 - **Target-Specific Search**: Early exit optimization when querying paths between specific source and destination nodes.
 - **Rich Results**: `DijkstraResult` provides path reconstruction, distance queries, reachability checks, and multiple output formats (Text, JSON, Graphviz DOT).
@@ -71,6 +74,19 @@ cmake --build build -j$(nproc)
 # Run full test suite
 ctest --test-dir build --output-on-failure
 ```
+
+## 🖥️ Interactive GUI Application (`dijkstra-gui`)
+Launch the interactive desktop visualizer:
+
+```bash
+./build/src/gui/dijkstra-gui
+```
+
+- **Double-Click**: Create a new vertex at mouse cursor.
+- **Click & Drag**: Move vertex position on 2D canvas.
+- **Shift + Click**: Create an edge between two vertices.
+- **Right-Click**: Open context menu to edit weights, set Start/Target, or delete elements.
+- **Playback Controls**: Step through Dijkstra's algorithm with Play/Pause, speed slider, and timeline scrubber.
 
 ---
 
