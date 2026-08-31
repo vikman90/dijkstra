@@ -32,3 +32,11 @@ foreach(T IN LISTS UNIT_TESTS)
     target_compile_features(${T} PRIVATE cxx_std_20)
     gtest_discover_tests(${T})
 endforeach()
+
+# CLI smoke and integration test suite
+add_test(
+    NAME cli_integration_test
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/integration/cli_test.sh
+        $<TARGET_FILE:dijkstra-bin>
+        $<TARGET_FILE:random-graph>
+)
