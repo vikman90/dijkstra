@@ -1,0 +1,60 @@
+site_name: "Dijkstra — Modern C++ & Algorithm Guide"
+site_description: "An educational, high-performance C++20 implementation of Dijkstra's algorithm and graph data structures"
+site_author: "Vikman Fernandez-Castro"
+site_url: "https://vikman90.github.io/dijkstra"
+repo_url: "https://github.com/vikman90/dijkstra"
+repo_name: "vikman90/dijkstra"
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.arithmatex:
+      generic: true
+  - tables
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - "Home": index.md
+  - "Algorithm & Theory": algorithm.md
+  - "Data Structures": data-structures.md
+  - "Modern C++ (C++20)": cpp-features.md
+  - "CLI Reference": cli.md
+  - "Testing & Quality": testing.md
