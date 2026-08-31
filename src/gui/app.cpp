@@ -463,9 +463,9 @@ void App::render_help_modal() {
     ImGui::OpenPopup("HelpGuideModal");
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(520.0f, 400.0f));
+    ImGui::SetNextWindowSize(ImVec2(520.0f, 0.0f));
 
-    if (ImGui::BeginPopupModal("HelpGuideModal", &show_help_modal_, ImGuiWindowFlags_NoResize)) {
+    if (ImGui::BeginPopupModal("HelpGuideModal", &show_help_modal_, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::TextColored(ImVec4(0.4f, 0.8f, 1.0f, 1.0f), "Interactive Dijkstra GUI Guide");
         ImGui::Separator();
 
@@ -498,10 +498,10 @@ void App::render_random_modal() {
     ImGui::OpenPopup("RandomGraphModal");
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(360.0f, 200.0f));
+    ImGui::SetNextWindowSize(ImVec2(360.0f, 0.0f));
 
-    if (ImGui::BeginPopupModal("RandomGraphModal", &show_random_modal_, ImGuiWindowFlags_NoResize)) {
-        ImGui::Text("Generate Random 2D Geometric Graph");
+    if (ImGui::BeginPopupModal("RandomGraphModal", &show_random_modal_, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::TextColored(ImVec4(0.4f, 0.8f, 1.0f, 1.0f), "Generate Random 2D Geometric Graph");
         ImGui::Separator();
 
         ImGui::SliderInt("Vertices", &random_nodes_input_, 3, 30);
