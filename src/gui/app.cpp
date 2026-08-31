@@ -255,12 +255,15 @@ void App::render_ui() {
         is_dirty_ = false;
     }
 
+    bool modal_active = show_help_modal_ || show_random_modal_;
+
     canvas_.render(
         vg_,
         canvas_pos,
         canvas_size,
         current_step(),
-        instant_result_
+        instant_result_,
+        !modal_active
     );
 
     ImGui::End();

@@ -86,7 +86,8 @@ class Canvas {
         const ImVec2 &canvas_pos,
         const ImVec2 &canvas_size,
         const std::optional<DijkstraStep> &current_step = std::nullopt,
-        const std::optional<DijkstraResult> &instant_result = std::nullopt
+        const std::optional<DijkstraResult> &instant_result = std::nullopt,
+        bool interactable = true
     );
 
     // Selection accessors

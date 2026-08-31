@@ -224,7 +224,8 @@ void Canvas::render(
     const ImVec2 &canvas_pos,
     const ImVec2 &canvas_size,
     const std::optional<DijkstraStep> &current_step,
-    const std::optional<DijkstraResult> &instant_result
+    const std::optional<DijkstraResult> &instant_result,
+    bool interactable
 ) {
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     ImGuiIO &io = ImGui::GetIO();
@@ -255,12 +256,19 @@ void Canvas::render(
     }
 
     // Handle mouse interactions inside canvas
-    bool is_canvas_hovered = ImGui::IsMouseHoveringRect(canvas_p0, canvas_p1);
+    bool is_canvas_hovered = interactable &&
+                            !ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) &&
+                            ImGui::IsMouseHoveringRect(canvas_p0, canvas_p1);
     ImVec2 mouse_screen = io.MousePos;
     ImVec2 mouse_world = screen_to_world(mouse_screen, canvas_p0);
 
     hovered_node_ = std::nullopt;
     hovered_edge_ = std::nullopt;
+
+    if (!interactable) {
+        dragging_node_ = std::nullopt;
+        connecting_source_ = std::nullopt;
+    }
 
     if (is_canvas_hovered) {
         hovered_node_ = hit_test_node(vg, mouse_world, 24.0f);
