@@ -3,13 +3,10 @@ add_executable(random-graph
 )
 
 target_link_libraries(random-graph
-    dijkstra-lib
-)
-
-target_include_directories(random-graph
-    PRIVATE ../library
+    PRIVATE
+        dijkstra-lib
 )
 
 install(TARGETS random-graph
-    DESTINATION bin
+    RUNTIME DESTINATION bin
 )
