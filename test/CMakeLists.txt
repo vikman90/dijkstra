@@ -28,6 +28,7 @@ foreach(T IN LISTS UNIT_TESTS)
         PRIVATE
             GTest::gtest_main
             dijkstra-lib
+            dijkstra-compiler-flags
     )
     target_compile_features(${T} PRIVATE cxx_std_20)
     gtest_discover_tests(${T})

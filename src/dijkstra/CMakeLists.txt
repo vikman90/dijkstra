@@ -5,6 +5,7 @@ add_executable(dijkstra-bin
 target_link_libraries(dijkstra-bin
     PRIVATE
         dijkstra-lib
+        dijkstra-compiler-flags
 )
 
 set_target_properties(dijkstra-bin
