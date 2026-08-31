@@ -3,11 +3,8 @@ add_executable(dijkstra-bin
 )
 
 target_link_libraries(dijkstra-bin
-    dijkstra-lib
-)
-
-target_include_directories(dijkstra-bin
-    PRIVATE ../library
+    PRIVATE
+        dijkstra-lib
 )
 
 set_target_properties(dijkstra-bin
@@ -15,5 +12,5 @@ set_target_properties(dijkstra-bin
 )
 
 install(TARGETS dijkstra-bin
-    DESTINATION bin
+    RUNTIME DESTINATION bin
 )

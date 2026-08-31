@@ -1,35 +1,39 @@
 /**
  * @file point.cpp
- * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
- * @brief Implementation of graph support classes
- * @version 0.1
- * @date 2023-04-06
- *
- * @copyright Copyright (c) 2023
- *
+ * @brief Implementation of Point geometric utilities.
  */
 
-#include "point.h"
+#include "dijkstra/point.h"
+
+#include <cmath>
 #include <random>
 
-using namespace std;
+namespace dijkstra {
 
-// Generate a vector of random points
+double euclidean_distance(const Point &p1, const Point &p2) noexcept {
+    return std::hypot(p1.x - p2.x, p1.y - p2.y);
+}
 
-vector<Point> randomPoints(unsigned long size) {
-    static auto gen = mt19937(random_device()());
-    auto points = vector<Point>(size);
-    auto distribution = uniform_real_distribution<>(-1.0, +1.0);
+std::vector<Point> random_points(
+    std::size_t count,
+    std::optional<std::uint64_t> seed
+) {
+    std::mt19937_64 engine;
+    if (seed.has_value()) {
+        engine.seed(*seed);
+    } else {
+        std::random_device rd;
+        engine.seed(rd());
+    }
 
-    for (auto i = 0ul; i < size; i++) {
-        points[i] = Point{.x = distribution(gen), .y = distribution(gen)};
+    std::uniform_real_distribution<double> dist(-1.0, 1.0);
+    std::vector<Point> points(count);
+
+    for (std::size_t i = 0; i < count; ++i) {
+        points[i] = Point{.x = dist(engine), .y = dist(engine)};
     }
 
     return points;
 }
 
-// Comparison operator
-
-bool EdgeCompare::operator()(const Edge &e1, const Edge &e2) {
-    return e1.distance > e2.distance;
-}
+} // namespace dijkstra

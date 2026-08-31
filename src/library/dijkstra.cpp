@@ -1,57 +1,157 @@
 /**
  * @file dijkstra.cpp
- * @author Vikman Fernandez-Castro (vmfdez90@gmail.com)
- * @brief Dijkstra function implementation
- * @version 0.1
- * @date 2023-04-01
- *
- * @copyright Copyright (c) 2023
- *
+ * @brief Implementation of Dijkstra's shortest path algorithm and DijkstraResult methods.
  */
 
-#include "dijkstra.h"
+#include "dijkstra/dijkstra.h"
 
-using std::vector;
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <utility>
 
-// Compute the Dijkstra's algorithm
+namespace dijkstra {
 
-vector<Node> dijkstra(const Graph &graph, unsigned long begin) {
-    auto nodes = createNodes(graph.size);
-    auto queue = NodeQueue();
+DijkstraResult::DijkstraResult(
+    NodeId source,
+    std::optional<NodeId> target,
+    std::vector<Weight> distances,
+    std::vector<NodeId> predecessors,
+    std::size_t visited_count
+)
+    : source_(source),
+      target_(target),
+      distances_(std::move(distances)),
+      predecessors_(std::move(predecessors)),
+      visited_count_(visited_count) {}
 
-    nodes[begin].cost = 0;
-    queue.push(&nodes[begin]);
+bool DijkstraResult::has_path_to(NodeId destination) const {
+    if (destination >= distances_.size()) {
+        return false;
+    }
+    return distances_[destination] < kInfinity;
+}
 
-    while (!queue.empty()) {
-        auto cur_node = queue.top();
-        queue.pop();
+std::optional<Weight> DijkstraResult::distance_to(NodeId destination) const {
+    if (!has_path_to(destination)) {
+        return std::nullopt;
+    }
+    return distances_[destination];
+}
 
-        if (cur_node->visited) {
+std::optional<std::vector<NodeId>> DijkstraResult::path_to(NodeId destination) const {
+    if (!has_path_to(destination)) {
+        return std::nullopt;
+    }
+
+    std::vector<NodeId> path;
+    for (NodeId curr = destination; curr != kNullNode; curr = predecessors_[curr]) {
+        path.push_back(curr);
+        if (curr == source_) {
+            break;
+        }
+    }
+
+    std::reverse(path.begin(), path.end());
+    if (path.empty() || path.front() != source_) {
+        return std::nullopt;
+    }
+
+    return path;
+}
+
+bool DijkstraResult::is_connected() const noexcept {
+    for (const auto &d : distances_) {
+        if (d == kInfinity) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void DijkstraResult::print_summary(std::ostream &os) const {
+    for (NodeId i = 0; i < distances_.size(); ++i) {
+        if (i == source_) {
+            os << "  → " << i << " [0]\n";
+        } else if (distances_[i] == kInfinity || predecessors_[i] == kNullNode) {
+            os << "  → " << i << " [X]\n";
+        } else {
+            os << predecessors_[i] << " → " << i << " [" << distances_[i] << "]\n";
+        }
+    }
+}
+
+namespace {
+
+DijkstraResult run_dijkstra(
+    const Graph &graph,
+    NodeId source,
+    std::optional<NodeId> target
+) {
+    const std::size_t n = graph.node_count();
+    if (source >= n) {
+        throw InvalidNodeException("Source node index out of bounds");
+    }
+    if (target.has_value() && *target >= n) {
+        throw InvalidNodeException("Target node index out of bounds");
+    }
+
+    std::vector<Weight> dist(n, kInfinity);
+    std::vector<NodeId> prev(n, kNullNode);
+    std::vector<bool> visited(n, false);
+    std::size_t visited_count = 0;
+
+    using QueueElement = std::pair<Weight, NodeId>;
+    std::priority_queue<
+        QueueElement,
+        std::vector<QueueElement>,
+        std::greater<QueueElement>>
+        pq;
+
+    dist[source] = 0.0;
+    pq.emplace(0.0, source);
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+
+        if (visited[u]) {
             continue;
         }
 
-        cur_node->visited = true;
+        visited[u] = true;
+        ++visited_count;
 
-        for (auto i = 0ul; i < graph.size; i++) {
-            if (nodes[i].visited) {
+        if (target.has_value() && u == *target) {
+            break;
+        }
+
+        for (const auto &edge : graph.neighbors(u)) {
+            NodeId v = edge.to;
+            if (visited[v]) {
                 continue;
             }
 
-            auto weight = graph.getWeight(cur_node->index, i);
-
-            if (weight == 0) {
-                continue;
-            }
-
-            auto cost = nodes[cur_node->index].cost + weight;
-
-            if (cost < nodes[i].cost) {
-                nodes[i].prev = cur_node->index;
-                nodes[i].cost = cost;
-                queue.push(&nodes[i]);
+            Weight new_cost = dist[u] + edge.weight;
+            if (new_cost < dist[v]) {
+                dist[v] = new_cost;
+                prev[v] = u;
+                pq.emplace(new_cost, v);
             }
         }
     }
 
-    return nodes;
+    return DijkstraResult(source, target, std::move(dist), std::move(prev), visited_count);
 }
+
+} // namespace
+
+DijkstraResult shortest_paths(const Graph &graph, NodeId source) {
+    return run_dijkstra(graph, source, std::nullopt);
+}
+
+DijkstraResult shortest_path(const Graph &graph, NodeId source, NodeId target) {
+    return run_dijkstra(graph, source, target);
+}
+
+} // namespace dijkstra
